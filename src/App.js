@@ -4,7 +4,15 @@ import './App.css';
 function App() {
   return (
     <div className="main">
-      <h2>Hello</h2>
+      <video
+        className='video'
+        autoPlay
+      />
+      <div className='control'>
+        <button className='btn'>Train 1</button>
+        <button className='btn'>Train 2</button>
+        <button className='btn'>Run</button>
+      </div>
     </div>
   );
 }
