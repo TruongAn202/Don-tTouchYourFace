@@ -1,5 +1,13 @@
 
 import './App.css';
+import {Howl, Howler} from 'howler';
+import soundURL from './assets/Giong-nu-noi-xin-chao-www_tiengdong_com.mp3'
+
+// var sound = new Howl({
+//   src: [soundURL]
+// });
+
+//sound.play();
 
 function App() {
   return (
