@@ -14,6 +14,7 @@ import * as knnClassifier from '@tensorflow-models/knn-classifier';
 const NOT_TOUCH_LABLE = 'not_touch';
 const TOUCHED_LABLE = 'touched';
 const  TRAINING_TIMES = 50; //học 50 lần
+const TOUCHED_CONFIDENCES = 0.8; // đủ mức độ tin cậy đưa ra quyết định
 function App() {
 
   const videoRef = useRef(null);
@@ -74,6 +75,23 @@ function App() {
      });
   }
 
+  const run = async () =>{
+    const emdedding = mobileNetModule.current.infer( //chup hinh dua vao du lieu
+      videoRef.current,
+      true
+    );
+    const result= await classifer.current.predictClass(emdedding);
+
+    if(result.label === TOUCHED_LABLE && result.confidences[result.label]> TOUCHED_CONFIDENCES){
+      console.log('Tounched');
+    }else{
+      console.log('Not Touch');
+    }
+
+    await sleep(200);
+    run();
+  }
+
   const sleep = (ms = 0 ) => {
     return new Promise (resolve => setTimeout(resolve, ms))
   }
@@ -101,7 +119,7 @@ function App() {
       <div className='control'>
         <button className='btn' onClick={()=>train(NOT_TOUCH_LABLE)}>Train 1</button>
         <button className='btn' onClick={()=>train(TOUCHED_LABLE)}>Train 2</button>
-        <button className='btn' onClick={()=>{}}>Run</button>
+        <button className='btn' onClick={()=>run()}>Run</button>
       </div>
     </div>
   );
