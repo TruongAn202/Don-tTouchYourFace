@@ -16,9 +16,9 @@ const TOUCHED_LABLE = 'touched';
 const  TRAINING_TIMES = 50; //học 50 lần
 function App() {
 
-  const videoRef = useRef();
-  const classifer = useRef();
-  const mobileNetModule = useRef();
+  const videoRef = useRef(null);
+  const classifer = useRef(null);
+  const mobileNetModule = useRef(null);
 
   const init = async () => {
     console.log('init...');
@@ -55,10 +55,23 @@ function App() {
   }
 
   const train = async label => {
+    console.log('Đang train !')
     for (let i = 0; i < TRAINING_TIMES; ++i) {
     console.log(`Progress ${parseInt((i+1) / TRAINING_TIMES * 100)}%`);
-    await sleep(100);
+    await training(label);
     }
+  }
+
+  const training = label =>{
+    return new Promise(async resolve=>{
+      const emdedding = mobileNetModule.current.infer( //chup hinh dua vao du lieu
+        videoRef.current,
+        true
+      );
+        classifer.current.addExample(emdedding,label); //hoc máy
+        await sleep(100); 
+        resolve();
+     });
   }
 
   const sleep = (ms = 0 ) => {
